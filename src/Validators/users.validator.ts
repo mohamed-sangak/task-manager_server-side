@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const userIdParams = z.object({
-  id: z.preprocess((v) => Number(v), z.number().int().positive()),
+  id: z.string().uuid(),
 });
 
 export const updateUserRoleSchema = z.object({

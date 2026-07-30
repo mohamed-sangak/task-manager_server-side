@@ -13,9 +13,12 @@ import { TaskStatus, TaskPriority } from '../../Common/enums';
   ],
 })
 export class Task extends Model {
+  @Column({ type: DataType.UUID, defaultValue: DataType.UUIDV4, primaryKey: true })
+  id!: string;
+
   @ForeignKey(() => Project)
-  @Column({ type: DataType.INTEGER, allowNull: false })
-  projectId!: number;
+  @Column({ type: DataType.UUID, allowNull: false })
+  projectId!: string;
 
   @Column({ type: DataType.STRING, allowNull: false })
   title!: string;
@@ -40,12 +43,12 @@ export class Task extends Model {
   dueDate!: Date | null;
 
   @ForeignKey(() => User)
-  @Column({ type: DataType.INTEGER, allowNull: false })
-  createdBy!: number;
+  @Column({ type: DataType.UUID, allowNull: false })
+  createdBy!: string;
 
   @ForeignKey(() => User)
-  @Column({ type: DataType.INTEGER, allowNull: true })
-  assigneeId!: number | null;
+  @Column({ type: DataType.UUID, allowNull: true })
+  assigneeId!: string | null;
 
   // Associations
   @BelongsTo(() => Project)

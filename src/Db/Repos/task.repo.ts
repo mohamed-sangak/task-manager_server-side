@@ -4,11 +4,11 @@ import { TaskPriority, TaskStatus } from '../../Common/enums';
 export interface TaskFilters {
     status?: TaskStatus;
     priority?: TaskPriority;
-    assigneeId?: number;
+    assigneeId?: string;
 }
 
 export class TaskRepository {
-    async findById(id: number) {
+    async findById(id: string) {
         return Task.findByPk(id, {
             include: [
                 { model: User, as: 'creator', attributes: ['id', 'name', 'email'] },
@@ -18,7 +18,7 @@ export class TaskRepository {
     }
 
     // Joins task details along with comments and commenter metadata
-    async findTaskWithFullDetails(id: number) {
+    async findTaskWithFullDetails(id: string) {
         return Task.findByPk(id, {
             include: [
                 { model: User, as: 'creator', attributes: ['id', 'name', 'email'] },
@@ -32,7 +32,7 @@ export class TaskRepository {
         });
     }
 
-    async findTasksByProject(projectId: number, filters?: TaskFilters) {
+    async findTasksByProject(projectId: string, filters?: TaskFilters) {
         const whereCondition: any = { projectId };
 
         if (filters?.status) whereCondition.status = filters.status;
@@ -50,12 +50,12 @@ export class TaskRepository {
         return Task.create(data as any);
     }
 
-    async update(id: number, data: Partial<Task>) {
+    async update(id: string, data: Partial<Task>) {
         const [affected] = await Task.update(data, { where: { id } });
         return affected > 0;
     }
 
-    async delete(id: number) {
+    async delete(id: string) {
         const deleted = await Task.destroy({ where: { id } });
         return deleted > 0;
     }

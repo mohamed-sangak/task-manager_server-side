@@ -3,6 +3,9 @@ import { ProjectMember, User, Task } from '../Models';
 
 @Table({ tableName: 'projects', timestamps: true })
 export class Project extends Model {
+  @Column({ type: DataType.UUID, defaultValue: DataType.UUIDV4, primaryKey: true })
+  id!: string;
+
   @Column({ type: DataType.STRING, allowNull: false })
   name!: string;
 
@@ -10,8 +13,8 @@ export class Project extends Model {
   description!: string | null;
 
   @ForeignKey(() => User)
-  @Column({ type: DataType.INTEGER, allowNull: false })
-  createdBy!: number;
+  @Column({ type: DataType.UUID, allowNull: false })
+  createdBy!: string;
 
   @BelongsTo(() => User, 'createdBy')
   creator!: User;

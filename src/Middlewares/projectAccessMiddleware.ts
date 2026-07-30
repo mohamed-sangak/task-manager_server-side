@@ -23,7 +23,7 @@ export const requireProjectAccess = async (
       return;
     }
 
-    const projectId = Number(req.params.projectId);
+    const projectId = req.params.projectId as string;
     if (!projectId) {
       return next(badRequest("Invalid project ID."));
     }

@@ -1,7 +1,7 @@
 import { User } from '../Models';
 
 export class UserRepository {
-    async findById(id: number) {
+    async findById(id: string) {
         return User.findByPk(id, {
             attributes: { exclude: ['passwordHash'] },
         });
@@ -21,12 +21,12 @@ export class UserRepository {
         return User.create(data as any);
     }
 
-    async update(id: number, data: Partial<User>) {
+    async update(id: string, data: Partial<User>) {
         const [affected] = await User.update(data, { where: { id } });
         return affected > 0;
     }
 
-    async delete(id: number) {
+    async delete(id: string) {
         const deleted = await User.destroy({ where: { id } });
         return deleted > 0;
     }

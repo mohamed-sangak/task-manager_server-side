@@ -4,8 +4,8 @@ import { ProjectUserRole } from '../Common/enums.js';
 export const createProjectSchema = z.object({
   name: z.string().min(1, 'Project name is required.'),
   description: z.string().optional(),
-  managers: z.array(z.number().int().positive()).optional(),
-  members: z.array(z.number().int().positive()).optional(),
+  managers: z.array(z.string().uuid()).optional(),
+  members: z.array(z.string().uuid()).optional(),
 });
 
 export const updateProjectSchema = z.object({
@@ -14,17 +14,17 @@ export const updateProjectSchema = z.object({
 });
 
 export const addMemberSchema = z.object({
-  userId: z.number().int().positive(),
+  userId: z.string().uuid(),
   role: z.nativeEnum(ProjectUserRole),
 });
 
 export const projectIdParams = z.object({
-  projectId: z.preprocess((v) => Number(v), z.number().int().positive()),
+  projectId: z.string().uuid(),
 });
 
 export const projectMemberParams = z.object({
-  projectId: z.preprocess((v) => Number(v), z.number().int().positive()),
-  userId: z.preprocess((v) => Number(v), z.number().int().positive()),
+  projectId: z.string().uuid(),
+  userId: z.string().uuid(),
 });
 
 export const createProjectValidator = { body: createProjectSchema };

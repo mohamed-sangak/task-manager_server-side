@@ -16,12 +16,12 @@ import { ProjectUserRole } from '../../Common/enums';
 })
 export class ProjectMember extends Model {
   @ForeignKey(() => Project)
-  @Column({ type: DataType.INTEGER, allowNull: false })
-  projectId!: number;
+  @Column({ type: DataType.UUID, allowNull: false })
+  projectId!: string;
 
   @ForeignKey(() => User)
-  @Column({ type: DataType.INTEGER, allowNull: false })
-  userId!: number;
+  @Column({ type: DataType.UUID, allowNull: false })
+  userId!: string;
 
   @Column({
     type: DataType.ENUM(...Object.values(ProjectUserRole)),

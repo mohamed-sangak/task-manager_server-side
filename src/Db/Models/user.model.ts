@@ -5,6 +5,9 @@ import { Project, ProjectMember, Task, TaskComment } from '../Models';
 
 @Table({ tableName: 'users', timestamps: true })
 export class User extends Model {
+  @Column({ type: DataType.UUID, defaultValue: DataType.UUIDV4, primaryKey: true })
+  id!: string;
+
   @Column({ type: DataType.STRING, allowNull: false })
   name!: string;
 

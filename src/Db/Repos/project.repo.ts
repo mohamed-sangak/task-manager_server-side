@@ -1,7 +1,7 @@
 import { Project, ProjectMember, User } from '../Models';
 
 export class ProjectRepository {
-  async findById(id: number) {
+  async findById(id: string) {
     return Project.findByPk(id, {
       include: [
         { model: User, as: 'creator', attributes: ['id', 'name', 'email'] },
@@ -13,7 +13,7 @@ export class ProjectRepository {
     });
   }
 
-  async findProjectsByUser(userId: number) {
+  async findProjectsByUser(userId: string) {
     return Project.findAll({
       include: [
         {
@@ -29,12 +29,12 @@ export class ProjectRepository {
     return Project.create(data as any);
   }
 
-  async update(id: number, data: Partial<Project>) {
+  async update(id: string, data: Partial<Project>) {
     const [affected] = await Project.update(data, { where: { id } });
     return affected > 0;
   }
 
-  async delete(id: number) {
+  async delete(id: string) {
     const deleted = await Project.destroy({ where: { id } });
     return deleted > 0;
   }

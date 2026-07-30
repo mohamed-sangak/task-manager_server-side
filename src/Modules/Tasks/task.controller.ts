@@ -14,14 +14,14 @@ export class TaskController {
 
   // GET /api/projects/:projectId/tasks
   getTasks = async (req: Request, res: Response)=> {
-    const projectId = Number(req.params.projectId);
+    const projectId = req.params.projectId as string;
     if (!projectId) throw badRequest("Invalid project ID.");
 
     const { status, priority, assigneeId } = req.query as any;
     const filters: any = {};
     if (status) filters.status = status;
     if (priority) filters.priority = priority;
-    if (assigneeId) filters.assigneeId = Number(assigneeId);
+    if (assigneeId) filters.assigneeId = assigneeId;
 
     const tasks = await this.taskRepo.findTasksByProject(projectId, filters);
     return sendSuccess(res, tasks);
@@ -29,18 +29,18 @@ export class TaskController {
 
   // GET /api/projects/:projectId/tasks/:taskId
   getTask = async (req: Request, res: Response)=> {
-    const taskId = Number(req.params.taskId);
+    const taskId = req.params.taskId as string;
     if (!taskId) throw badRequest("Invalid task ID.");
 
     const task = await this.taskRepo.findById(taskId);
-    if (!task || Number(task.projectId) !== Number(req.params.projectId)) throw notFound("Task not found.");
+    if (!task || task.projectId !== req.params.projectId) throw notFound("Task not found.");
 
     return sendSuccess(res, task);
   };
 
   // POST /api/projects/:projectId/tasks
   createTask = async (req: Request, res: Response)=> {
-    const projectId = Number(req.params.projectId);
+    const projectId = req.params.projectId as string;
     if (!projectId) throw badRequest("Invalid project ID.");
 
     const { title, description, status, priority, dueDate, assigneeId } = req.body;
@@ -63,12 +63,12 @@ export class TaskController {
 
   // PUT /api/projects/:projectId/tasks/:taskId
   updateTask = async (req: Request, res: Response)=> {
-    const projectId = Number(req.params.projectId);
-    const taskId = Number(req.params.taskId);
+    const projectId = req.params.projectId as string;
+    const taskId = req.params.taskId as string;
     if (!projectId || !taskId) throw badRequest("Invalid IDs.");
 
     const task = await this.taskRepo.findById(taskId);
-    if (!task || Number(task.projectId) !== projectId) throw notFound("Task not found.");
+    if (!task || task.projectId !== projectId) throw notFound("Task not found.");
 
     const user = req.user!;
 
@@ -88,12 +88,12 @@ export class TaskController {
 
   // DELETE /api/projects/:projectId/tasks/:taskId
   deleteTask = async (req: Request, res: Response)=> {
-    const projectId = Number(req.params.projectId);
-    const taskId = Number(req.params.taskId);
+    const projectId = req.params.projectId as string;
+    const taskId = req.params.taskId as string;
     if (!projectId || !taskId) throw badRequest("Invalid IDs.");
 
     const task = await this.taskRepo.findById(taskId);
-    if (!task || Number(task.projectId) !== projectId) throw notFound("Task not found.");
+    if (!task || task.projectId !== projectId) throw notFound("Task not found.");
 
     const user = req.user!;
     if (user.role !== "Admin") {

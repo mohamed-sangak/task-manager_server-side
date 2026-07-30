@@ -15,7 +15,7 @@ export class UserController {
 
   // GET /api/users/:id  — Admin only
   getUserById = async (req: Request, res: Response) => {
-    const id = Number(req.params.id);
+    const id = req.params.id as string;
     if (!id) throw badRequest("Invalid user ID.");
 
     const user = await this.userRepo.findById(id);
@@ -26,7 +26,7 @@ export class UserController {
 
   // PUT /api/users/:id/role  — Admin only
   updateUserRole = async (req: Request, res: Response) => {
-    const id = Number(req.params.id);
+    const id = req.params.id as string;
     const { role } = req.body;
     const allowedRoles: UserRole[] = ["Admin", "User"];
 
@@ -42,7 +42,7 @@ export class UserController {
 
   // DELETE /api/users/:id  — Admin only
   deleteUser = async (req: Request, res: Response) => {
-    const id = Number(req.params.id);
+    const id = req.params.id as string;
     if (!id) throw badRequest("Invalid user ID.");
 
     const user = await this.userRepo.findById(id);
