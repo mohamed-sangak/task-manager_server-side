@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { ProjectMember } from "../Db/Models";
-import { sendError } from "../Utils/response.js";
+import { badRequest, forbidden, internal } from "../Utils/error.js";
 
 /**
  * Verifies the authenticated user is a member of the project
@@ -11,7 +11,7 @@ import { sendError } from "../Utils/response.js";
  */
 export const requireProjectAccess = async (
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
@@ -25,8 +25,7 @@ export const requireProjectAccess = async (
 
     const projectId = Number(req.params.projectId);
     if (!projectId) {
-      sendError(res, "Invalid project ID.", 400);
-      return;
+      return next(badRequest("Invalid project ID."));
     }
 
     const membership = await ProjectMember.findOne({
@@ -34,12 +33,11 @@ export const requireProjectAccess = async (
     });
 
     if (!membership) {
-      sendError(res, "You are not a member of this project.", 403);
-      return;
+      return next(forbidden("You are not a member of this project."));
     }
 
     next();
   } catch (err) {
-    sendError(res, "Failed to verify project access.", 500, err);
+    return next(internal("Failed to verify project access.", err));
   }
 };

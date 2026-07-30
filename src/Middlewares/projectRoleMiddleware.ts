@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
 import { ProjectMember } from '../Db/Models';
-import { sendError } from '../Utils/response.js';
+import { badRequest, forbidden, internal } from '../Utils/error.js';
 
 /**
  * Allows access if the user is Admin (global) or a project-level manager for req.params.projectId.
  */
 export const requireProjectManagerOrAdmin = async (
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
@@ -20,18 +20,16 @@ export const requireProjectManagerOrAdmin = async (
 
     const projectId = Number(req.params.projectId);
     if (!projectId) {
-      sendError(res, 'Invalid project ID.', 400);
-      return;
+      return next(badRequest('Invalid project ID.'));
     }
 
     const membership = await ProjectMember.findOne({ where: { projectId, userId: user.id } });
     if (!membership || (membership as any).role !== 'manager') {
-      sendError(res, 'Requires project manager role.', 403);
-      return;
+      return next(forbidden('Requires project manager role.'));
     }
 
     next();
   } catch (err) {
-    sendError(res, 'Failed to verify project manager permission.', 500, err);
+    return next(internal('Failed to verify project manager permission.', err));
   }
 };

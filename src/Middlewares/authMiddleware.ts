@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { verifyToken, JwtPayload } from "../Utils/jwt.js";
-import { sendError } from "../Utils/response.js";
+import { unauthorized } from "../Utils/error.js";
 
 // Extend Express Request to carry the authenticated user
 declare global {
@@ -13,14 +13,13 @@ declare global {
 
 export const authenticate = (
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction
 ): void => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    sendError(res, "No token provided. Please log in.", 401);
-    return;
+    throw unauthorized("No token provided. Please log in.");
   }
 
   const token = authHeader.split(" ")[1];
@@ -30,6 +29,6 @@ export const authenticate = (
     req.user = decoded;
     next();
   } catch {
-    sendError(res, "Invalid or expired token. Please log in again.", 401);
+    throw unauthorized("Invalid or expired token. Please log in again.");
   }
 };
