@@ -18,25 +18,42 @@ import { asyncHandler } from "../../Utils/asyncHandler.js";
 // All project routes require authentication
 router.use(authenticate);
 
+import { validate } from "../../Validators/validate.js";
+import {
+  createProjectValidator,
+  updateProjectValidator,
+  getProjectValidator,
+  deleteProjectValidator,
+  addMemberValidator,
+  removeMemberValidator,
+} from "../../Validators/projects.validator.js";
+
 // GET /api/projects  — any authenticated user (scoped by membership)
 router.get("/", asyncHandler(projectController.getProjects));
 
 // POST /api/projects  — Admin only
-router.post("/", requireRole("Admin"), asyncHandler(projectController.createProject));
+router.post(
+  "/",
+  requireRole("Admin"),
+  validate(createProjectValidator),
+  asyncHandler(projectController.createProject)
+);
 
 // Routes below require project membership (or Admin)
-router.get("/:projectId", requireProjectAccess, asyncHandler(projectController.getProject));
+router.get("/:projectId", requireProjectAccess, validate(getProjectValidator), asyncHandler(projectController.getProject));
 
 router.put(
   "/:projectId",
   requireProjectAccess,
   requireProjectManagerOrAdmin,
+  validate(updateProjectValidator),
   asyncHandler(projectController.updateProject)
 );
 router.delete(
   "/:projectId",
   requireProjectAccess,
   requireProjectManagerOrAdmin,
+  validate(deleteProjectValidator),
   asyncHandler(projectController.deleteProject)
 );
 
@@ -45,12 +62,14 @@ router.post(
   "/:projectId/members",
   requireProjectAccess,
   requireProjectManagerOrAdmin,
+  validate(addMemberValidator),
   asyncHandler(projectController.addMember)
 );
 router.delete(
   "/:projectId/members/:userId",
   requireProjectAccess,
   requireProjectManagerOrAdmin,
+  validate(removeMemberValidator),
   asyncHandler(projectController.removeMember)
 );
 

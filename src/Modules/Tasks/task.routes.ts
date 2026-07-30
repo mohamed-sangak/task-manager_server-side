@@ -14,14 +14,22 @@ const projectMemberRepo = new ProjectMemberRepository();
 const taskController = new TaskController(taskRepo, userRepo, projectMemberRepo);
 
 import { asyncHandler } from "../../Utils/asyncHandler.js";
+import { validate } from "../../Validators/validate.js";
+import {
+  listTasksValidator,
+  getTaskValidator,
+  createTaskValidator,
+  updateTaskValidator,
+  deleteTaskValidator,
+} from "../../Validators/tasks.validator.js";
 
 // All task routes: authenticate + verify project membership
 router.use(authenticate, requireProjectAccess);
 
-router.get("/", asyncHandler(taskController.getTasks));
-router.get("/:taskId", asyncHandler(taskController.getTask));
-router.post("/", asyncHandler(taskController.createTask));
-router.put("/:taskId", asyncHandler(taskController.updateTask));
-router.delete("/:taskId", asyncHandler(taskController.deleteTask));
+router.get("/", validate(listTasksValidator), asyncHandler(taskController.getTasks));
+router.get("/:taskId", validate(getTaskValidator), asyncHandler(taskController.getTask));
+router.post("/", validate(createTaskValidator), asyncHandler(taskController.createTask));
+router.put("/:taskId", validate(updateTaskValidator), asyncHandler(taskController.updateTask));
+router.delete("/:taskId", validate(deleteTaskValidator), asyncHandler(taskController.deleteTask));
 
 export default router;

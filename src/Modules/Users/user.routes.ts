@@ -10,13 +10,15 @@ const userRepo = new UserRepository();
 const userController = new UserController(userRepo);
 
 import { asyncHandler } from "../../Utils/asyncHandler.js";
+import { validate } from "../../Validators/validate.js";
+import { getUserValidator, updateUserRoleValidator, deleteUserValidator } from "../../Validators/users.validator.js";
 
 // All user management routes: Admin only
 router.use(authenticate, requireRole("Admin"));
 
 router.get("/", asyncHandler(userController.getAllUsers));
-router.get("/:id", asyncHandler(userController.getUserById));
-router.put("/:id/role", asyncHandler(userController.updateUserRole));
-router.delete("/:id", asyncHandler(userController.deleteUser));
+router.get("/:id", validate(getUserValidator), asyncHandler(userController.getUserById));
+router.put("/:id/role", validate(updateUserRoleValidator), asyncHandler(userController.updateUserRole));
+router.delete("/:id", validate(deleteUserValidator), asyncHandler(userController.deleteUser));
 
 export default router;

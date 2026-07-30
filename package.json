@@ -22,7 +22,8 @@
     "node-fetch": "^3.3.2",
     "reflect-metadata": "^0.2.2",
     "sequelize": "^6.37.8",
-    "sequelize-typescript": "^2.1.6"
+    "sequelize-typescript": "^2.1.6",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
