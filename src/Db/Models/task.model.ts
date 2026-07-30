@@ -1,7 +1,5 @@
 import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from 'sequelize-typescript';
-import { Project } from './project.model';
-import { TaskComment } from './taskComment.model';
-import { User } from './user.model';
+import { Project, TaskComment, User } from '../Models';
 import { TaskStatus, TaskPriority } from '../../Common/enums';
 
 

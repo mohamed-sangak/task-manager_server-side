@@ -1,6 +1,5 @@
 import { BelongsTo, Column, CreatedAt, DataType, ForeignKey, Model, Table } from 'sequelize-typescript';
-import { Task } from './task.model';
-import { User } from './user.model';
+import { Task, User } from '../Models';
 
 @Table({ tableName: 'task_comments', updatedAt: false }) // Schema only specifies created_at
 export class TaskComment extends Model {

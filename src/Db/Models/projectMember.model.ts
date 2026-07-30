@@ -1,6 +1,5 @@
 import { BelongsTo, Column, CreatedAt, DataType, ForeignKey, Model, Table } from 'sequelize-typescript';
-import { Project } from './project.model';
-import { User } from './user.model';
+import { User,Project } from '../Models';
 import { ProjectUserRole } from '../../Common/enums';
 
 

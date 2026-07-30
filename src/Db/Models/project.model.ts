@@ -1,7 +1,5 @@
 import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from 'sequelize-typescript';
-import { ProjectMember } from './projectMember.model';
-import { Task } from './task.model';
-import { User } from './user.model';
+import { ProjectMember, User, Task } from '../Models';
 
 @Table({ tableName: 'projects', timestamps: true })
 export class Project extends Model {

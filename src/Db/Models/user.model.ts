@@ -1,9 +1,5 @@
 import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
-import { Project } from './project.model';
-import { ProjectMember } from './projectMember.model';
-import { Task } from './task.model';
-import { TaskComment } from './taskComment.model';
-
+import { Project, ProjectMember, Task, TaskComment } from '../Models';
 
 
 
