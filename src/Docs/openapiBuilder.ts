@@ -111,6 +111,14 @@ regPath({
 
 // Project members
 regPath({
+  method: 'get',
+  path: '/api/projects/{projectId}/available-users',
+  summary: 'List users that can be added to a project',
+  request: { params: ProjectValidators.projectIdParams, query: ProjectValidators.availableUsersQuery },
+  responses: { 200: { description: 'OK', content: { 'application/json': { schema: SuccessWrapper } } } },
+});
+
+regPath({
   method: 'post',
   path: '/api/projects/{projectId}/members',
   summary: 'Add member to project',
@@ -123,6 +131,14 @@ regPath({
   path: '/api/projects/{projectId}/members/{userId}',
   summary: 'Remove project member',
   request: { params: ProjectValidators.projectMemberParams },
+  responses: { 200: { description: 'OK', content: { 'application/json': { schema: SuccessWrapper } } } },
+});
+
+regPath({
+  method: 'put',
+  path: '/api/projects/{projectId}/members/{userId}',
+  summary: 'Update project member role',
+  request: { params: ProjectValidators.projectMemberParams, body: { content: { 'application/json': { schema: ProjectValidators.updateMemberRoleSchema } } } },
   responses: { 200: { description: 'OK', content: { 'application/json': { schema: SuccessWrapper } } } },
 });
 

@@ -1,4 +1,5 @@
 import { Project, ProjectMember, User } from '../Models';
+import { Transaction } from 'sequelize';
 
 export class ProjectRepository {
   async findById(id: string) {
@@ -25,8 +26,8 @@ export class ProjectRepository {
     });
   }
 
-  async create(data: Partial<Project>) {
-    return Project.create(data as any);
+  async create(data: Partial<Project>, transaction?: Transaction) {
+    return Project.create(data as any, { transaction });
   }
 
   async update(id: string, data: Partial<Project>) {

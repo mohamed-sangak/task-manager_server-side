@@ -18,6 +18,14 @@ export const addMemberSchema = z.object({
   role: z.nativeEnum(ProjectUserRole),
 });
 
+export const updateMemberRoleSchema = z.object({
+  role: z.nativeEnum(ProjectUserRole),
+});
+
+export const availableUsersQuery = z.object({
+  search: z.string().trim().optional(),
+});
+
 export const projectIdParams = z.object({
   projectId: z.string().uuid(),
 });
@@ -31,5 +39,7 @@ export const createProjectValidator = { body: createProjectSchema };
 export const updateProjectValidator = { params: projectIdParams, body: updateProjectSchema };
 export const getProjectValidator = { params: projectIdParams };
 export const deleteProjectValidator = { params: projectIdParams };
+export const availableUsersValidator = { params: projectIdParams, query: availableUsersQuery };
 export const addMemberValidator = { params: projectIdParams, body: addMemberSchema };
+export const updateMemberRoleValidator = { params: projectMemberParams, body: updateMemberRoleSchema };
 export const removeMemberValidator = { params: projectMemberParams };

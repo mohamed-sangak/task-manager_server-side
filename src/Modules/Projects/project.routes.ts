@@ -13,7 +13,9 @@ import {
   updateProjectValidator,
   getProjectValidator,
   deleteProjectValidator,
+  availableUsersValidator,
   addMemberValidator,
+  updateMemberRoleValidator,
   removeMemberValidator,
 } from "../../Validators/projects.validator.js";
 
@@ -60,12 +62,26 @@ router.delete(
 );
 
 // Member management — Admin or Project Manager only
+router.get(
+  "/:projectId/available-users",
+  requireProjectAccess,
+  requireProjectManagerOrAdmin,
+  validate(availableUsersValidator),
+  asyncHandler(projectController.getAvailableUsers)
+);
 router.post(
   "/:projectId/members",
   requireProjectAccess,
   requireProjectManagerOrAdmin,
   validate(addMemberValidator),
   asyncHandler(projectController.addMember)
+);
+router.put(
+  "/:projectId/members/:userId",
+  requireProjectAccess,
+  requireProjectManagerOrAdmin,
+  validate(updateMemberRoleValidator),
+  asyncHandler(projectController.updateMemberRole)
 );
 router.delete(
   "/:projectId/members/:userId",
