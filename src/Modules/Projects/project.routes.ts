@@ -5,20 +5,9 @@ import { requireRole } from "../../Middlewares/roleMiddleware.js";
 import { requireProjectManagerOrAdmin } from "../../Middlewares/projectRoleMiddleware.js";
 import { ProjectRepository, ProjectMemberRepository, UserRepository } from "../../Db/Repos";
 import { ProjectController } from "./project.controller";
-
-const router = Router();
-
-const projectRepo = new ProjectRepository();
-const projectMemberRepo = new ProjectMemberRepository();
-const userRepo = new UserRepository();
-const projectController = new ProjectController(projectRepo, projectMemberRepo, userRepo);
-
 import { asyncHandler } from "../../Utils/asyncHandler.js";
+import validate  from "express-zod-safe";
 
-// All project routes require authentication
-router.use(authenticate);
-
-import { validate } from "../../Validators/validate.js";
 import {
   createProjectValidator,
   updateProjectValidator,
@@ -27,6 +16,19 @@ import {
   addMemberValidator,
   removeMemberValidator,
 } from "../../Validators/projects.validator.js";
+
+
+const router = Router();
+
+const projectRepo = new ProjectRepository();
+const projectMemberRepo = new ProjectMemberRepository();
+const userRepo = new UserRepository();
+const projectController = new ProjectController(projectRepo, projectMemberRepo, userRepo);
+
+
+// All project routes require authentication
+router.use(authenticate);
+
 
 // GET /api/projects  — any authenticated user (scoped by membership)
 router.get("/", asyncHandler(projectController.getProjects));

@@ -3,6 +3,15 @@ import { authenticate } from "../../Middlewares/authMiddleware.js";
 import { requireProjectAccess } from "../../Middlewares/projectAccessMiddleware.js";
 import { TaskRepository, UserRepository, ProjectMemberRepository } from "../../Db/Repos";
 import { TaskController } from "./task.controller";
+import { asyncHandler } from "../../Utils/asyncHandler.js";
+import validate  from "express-zod-safe";
+import {
+  listTasksValidator,
+  getTaskValidator,
+  createTaskValidator,
+  updateTaskValidator,
+  deleteTaskValidator,
+} from "../../Validators/tasks.validator.js";
 
 // Tasks are nested under /api/projects/:projectId/tasks
 // mergeParams: true is required for access to :projectId from the parent router
@@ -13,15 +22,6 @@ const userRepo = new UserRepository();
 const projectMemberRepo = new ProjectMemberRepository();
 const taskController = new TaskController(taskRepo, userRepo, projectMemberRepo);
 
-import { asyncHandler } from "../../Utils/asyncHandler.js";
-import { validate } from "../../Validators/validate.js";
-import {
-  listTasksValidator,
-  getTaskValidator,
-  createTaskValidator,
-  updateTaskValidator,
-  deleteTaskValidator,
-} from "../../Validators/tasks.validator.js";
 
 // All task routes: authenticate + verify project membership
 router.use(authenticate, requireProjectAccess);
