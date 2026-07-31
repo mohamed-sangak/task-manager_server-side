@@ -26,6 +26,18 @@ export class ProjectRepository {
     });
   }
 
+  async findAllAdminProjects() {
+    return Project.findAll({
+      include: [
+        {
+          model: ProjectMember,
+          include: [{ model: User, attributes: ['id', 'name', 'email'] }],
+        },
+      ],
+      order: [['createdAt', 'DESC']],
+    });
+  }
+
   async create(data: Partial<Project>, transaction?: Transaction) {
     return Project.create(data as any, { transaction });
   }
