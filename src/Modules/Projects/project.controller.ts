@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Project, User } from "../../Db/Models";
+import { Project, ProjectMember, User } from "../../Db/Models";
 import { sendSuccess } from "../../Utils/response.js";
 import { ProjectRepository, ProjectMemberRepository, UserRepository } from "../../Db/Repos";
 import { badRequest, notFound, conflict } from "../../Utils/error.js";
@@ -21,7 +21,10 @@ export class ProjectController {
       const projects = await Project.findAll({
         include: [
           { model: User, as: "creator", attributes: ["id", "name", "email"] },
-          { model: User, as: "members", attributes: ["id", "name", "email"] },
+          {
+            model: ProjectMember,
+            include: [{ model: User, attributes: ["id", "name", "email"] }],
+          },
         ],
         order: [["createdAt", "DESC"]],
       });
