@@ -18,7 +18,7 @@ export class UserRepository {
     }
 
     async create(data: Partial<User>) {
-        return User.create(data as any);
+        return User.create(data);
     }
 
     async update(id: string, data: Partial<User>) {

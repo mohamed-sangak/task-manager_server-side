@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { verifyToken, JwtPayload } from "../Utils/jwt.js";
+import { JwtPayload } from "../Common/interfaces";
 import { unauthorized } from "../Utils/error.js";
+import { verifyToken } from "../Utils/jwt";
 
 // Extend Express Request to carry the authenticated user
 declare global {
