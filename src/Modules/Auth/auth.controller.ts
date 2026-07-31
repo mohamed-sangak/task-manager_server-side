@@ -33,7 +33,7 @@ export class AuthController {
       role: "User",
     });
 
-    const role = (user.role || "User") as UserRole;
+    const role = user.role  as UserRole;
     const token = signToken({ id: user.id, email: user.email, role });
 
     return sendSuccess(
