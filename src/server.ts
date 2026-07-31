@@ -1,6 +1,8 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
 import swaggerUi from 'swagger-ui-express';
 
 import authRoutes from "./Modules/Auth/auth.routes.js";
@@ -13,10 +15,29 @@ import { errorHandler } from "./Middlewares/errorHandler.js";
 import openapiDocument from './Docs/openapiBuilder';
 
 const app = express();
+const allowedCorsOrigin = process.env.CORS_ORIGIN;
 
-app.use(cors());
+app.use(helmet());
+app.use(cors({
+    origin(origin, callback) {
+        if (!allowedCorsOrigin || allowedCorsOrigin === "*" || !origin || origin === allowedCorsOrigin) {
+            return callback(null, true);
+        }
+
+        return callback(new Error("Origin is not allowed by CORS."));
+    },
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    limit: 100,               // 100 requests per IP
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
+app.use("/api", limiter);
 
 // Routes 
 app.use("/api/auth", authRoutes);
