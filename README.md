@@ -68,7 +68,7 @@ The complete template is in `.env.example`.
 | `NODE_ENV` | Runtime environment | `development` |
 | `JWT_SECRET` | Secret used to sign and verify JWTs | long random secret |
 | `SALT_ROUNDS` | bcrypt password hashing cost | `12` |
-| `CORS_ORIGIN` | Allowed browser origin; use `*` only for local testing | `https://electropi-task-manager11.vercel.app` |
+| `CORS_ORIGIN` | Allowed browser origin; use `*` only for local testing | `*` |
 
 The API rate limiter applies to `/api`: 100 requests per IP every 15 minutes. Helmet is enabled for HTTP security headers.
 
@@ -139,18 +139,6 @@ npm start         # Start the server directly
 npm run build     # Compile and type-check the server
 npm run seed      # Run all database seeders
 ```
-
-## Connecting through ngrok
-
-Start the API locally, then expose the same port through ngrok:
-
-```bash
-ngrok http 5000
-```
-
-Use the HTTPS forwarding URL as the backend URL in the frontend. Set `CORS_ORIGIN` to the frontend origin, not the ngrok backend URL. Keep the server bound to the local machine and do not expose database ports through ngrok.
-
-For production-like testing, replace `CORS_ORIGIN=*` with the exact frontend origin and use a strong `JWT_SECRET`.
 
 ## Troubleshooting
 
