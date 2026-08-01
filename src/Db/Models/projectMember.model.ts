@@ -15,6 +15,10 @@ import { ProjectUserRole } from '../../Common/enums';
   ],
 })
 export class ProjectMember extends Model {
+  @Column({ type: DataType.UUID, defaultValue: DataType.UUIDV4, primaryKey: true })
+  id!: string;
+
+
   @ForeignKey(() => Project)
   @Column({ type: DataType.UUID, allowNull: false })
   projectId!: string;

@@ -3,6 +3,9 @@ import { Task, User } from '../Models';
 
 @Table({ tableName: 'task_comments', updatedAt: false }) // Schema only specifies created_at
 export class TaskComment extends Model {
+    @Column({ type: DataType.UUID, defaultValue: DataType.UUIDV4, primaryKey: true })
+    id!: string;
+
     @ForeignKey(() => Task)
     @Column({ type: DataType.UUID, allowNull: false })
     taskId!: string;
